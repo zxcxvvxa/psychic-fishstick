@@ -1,0 +1,45 @@
+{
+  "log": {
+    "loglevel": "none"
+  },
+  "dns": {
+    "servers": ["223.5.5.5", "223.6.6.6"],
+    "queryStrategy": "UseIPv4",
+    "disableCache": false,
+    "disableFallback": false
+  },
+  "inbounds": [
+    {
+      "port": 10000, "listen": "127.0.0.1", "protocol": "trojan", "tag": "trojan-ws",
+      "settings": {"clients": [{"password": "f-society"}]},
+      "streamSettings": {"network": "ws", "wsSettings": {"path": "/ima0hw"}, "sockopt": {"tcpFastOpen": true, "tcpNoDelay": true, "tcpKeepAliveInterval": 15}},
+      "sniffing": {"enabled": true, "destOverride": ["http", "tls"]}
+    },
+    {
+      "port": 10001, "listen": "127.0.0.1", "protocol": "vless", "tag": "vless-ws",
+      "settings": {"clients": [{"id": "fsociety"}], "decryption": "none"},
+      "streamSettings": {"network": "ws", "wsSettings": {"path": "/whoami"}, "sockopt": {"tcpFastOpen": true, "tcpNoDelay": true, "tcpKeepAliveInterval": 15}},
+      "sniffing": {"enabled": true, "destOverride": ["http", "tls", "fakedns", "quic"]}
+    }
+  ],
+  "outbounds": [
+    {
+      "protocol": "freedom",
+      "tag": "direct"
+    },
+    {
+      "protocol": "blackhole",
+      "tag": "block"
+    }
+  ],
+  "routing": {
+    "domainStrategy": "AsIs",
+    "rules": [
+      {
+        "type": "field",
+        "inboundTag": ["trojan-ws", "vless-ws"],
+        "outboundTag": "direct"
+      }
+    ]
+  }
+}
