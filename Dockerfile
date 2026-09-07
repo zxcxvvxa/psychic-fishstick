@@ -1,8 +1,8 @@
 FROM teddysun/xray:latest AS xray-bin
 
-FROM envoyproxy/envoy:v1.31.10
-
 ENV TZ=Asia/Shanghai
+
+FROM envoyproxy/envoy:v1.31.10
 
 COPY --from=xray-bin /usr/bin/xray /usr/local/bin/
 COPY config.json /etc/xray.json
