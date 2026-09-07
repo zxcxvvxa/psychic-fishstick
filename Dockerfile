@@ -1,6 +1,7 @@
 FROM teddysun/xray:latest AS xray-bin
 
 FROM envoyproxy/envoy:v1.31.10
+ENV TZ=Asia/Shanghai
 
 COPY --from=xray-bin /usr/bin/xray /usr/local/bin/
 
