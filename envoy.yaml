@@ -22,7 +22,7 @@ static_resources:
               - match:
                   prefix: "/ima0hw"
                 route:
-                  cluster: trojan_ws
+                  cluster: xray_trojan
                   timeout: 0s
                   idle_timeout: 0s
                   upgrade_configs:
@@ -31,7 +31,7 @@ static_resources:
               - match:
                   prefix: "/whoami"
                 route:
-                  cluster: vless_ws
+                  cluster: xray_vless
                   timeout: 0s
                   idle_timeout: 0s
                   upgrade_configs:
@@ -55,12 +55,12 @@ static_resources:
               "@type": type.googleapis.com/envoy.extensions.filters.http.router.v3.Router
 
   clusters:
-  - name: trojan_ws
+  - name: xray_trojan
     connect_timeout: 10s
     type: STATIC
     lb_policy: ROUND_ROBIN
     load_assignment:
-      cluster_name: trojan_ws
+      cluster_name: xray_trojan
       endpoints:
       - lb_endpoints:
         - endpoint:
@@ -69,12 +69,12 @@ static_resources:
                 address: 127.0.0.1
                 port_value: 10000
 
-  - name: vless_ws
+  - name: xray_vless
     connect_timeout: 10s
     type: STATIC
     lb_policy: ROUND_ROBIN
     load_assignment:
-      cluster_name: vless_ws
+      cluster_name: xray_vless
       endpoints:
       - lb_endpoints:
         - endpoint:
