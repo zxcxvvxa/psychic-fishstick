@@ -25,16 +25,26 @@ static_resources:
                   upgrade_configs:
                   - upgrade_type: websocket
               
+              
               - match:
                   prefix: "/whoami"
                 route:
                   cluster: xray_vless
                   upgrade_configs:
                   - upgrade_type: websocket
+              
+              
+              - match:
+                  prefix: "/"
+                redirect:
+                  uri: "https://wtfismyip.com/"
+                  response_code: FOUND # 302
+
           http_filters:
           - name: envoy.filters.http.router
             typed_config:
               "@type": type.googleapis.com/envoy.extensions.filters.http.router.v3.Router
+
   clusters:
   - name: xray_trojan
     connect_timeout: 2s
