@@ -17,7 +17,6 @@ static_resources:
             - name: local_service
               domains: ["*"]
               routes:
-              
               - match:
                   prefix: "/ima0hw"
                 route:
@@ -25,20 +24,29 @@ static_resources:
                   upgrade_configs:
                   - upgrade_type: websocket
               
-              
               - match:
                   prefix: "/whoami"
                 route:
                   cluster: xray_vless
                   upgrade_configs:
                   - upgrade_type: websocket
-              
-              
+
+              # CATCH-ALL DECOY — REDIRECT TO wtfismyip.com
               - match:
                   prefix: "/"
-                redirect:
-                  uri: "https://wtfismyip.com/"
-                  response_code: FOUND # 302
+                direct_response:
+                  status: 302
+                  body:
+                    inline_string: ""
+                  response_headers_to_add:
+                  - header:
+                      key: Location
+                      value: "https://wtfismyip.com/"
+                    append: false
+                  - header:
+                      key: Content-Type
+                      value: "text/html; charset=utf-8"
+                    append: false
 
           http_filters:
           - name: envoy.filters.http.router
